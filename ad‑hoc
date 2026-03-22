@@ -1,0 +1,21 @@
+
+# Ping all hosts
+ansible all -i inventory.ini -m ping
+
+# Run a command (command module)
+ansible webservers -i inventory.ini -m command -a "uname -r"
+
+# Run a shell pipeline (shell module)
+ansible dbservers -i inventory.ini -m shell -a "df -h | grep -E '/$'"
+
+# Copy a file
+ansible webservers -i inventory.ini -m copy -a "src=./files/index.html dest=/var/www/html/index.html mode=0644"
+
+# Manage a service
+ansible webservers -i inventory.ini -m service -a "name=httpd state=started enabled=yes" --become
+
+# Install a package on RHEL/CentOS (yum)
+ansible dbservers -i inventory.ini -m yum -a "name=vim state=present" --become
+
+# Install a package on Debian/Ubuntu (apt)
+ansible debian_hosts -i inventory.ini -m apt -a "name=htop state=present update_cache=yes" --become
